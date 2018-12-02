@@ -19,6 +19,7 @@ var indexToDelete = 0
 var mediaSelected = false
 var isOrientationPortrait = true
  var searchDeletedIndex = 0
+var termSearch = "Jack Johnson"
 
 class ViewController: UIViewController,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate {
   @IBOutlet weak var albumTableView: UITableView!
@@ -66,6 +67,7 @@ class ViewController: UIViewController,UIScrollViewDelegate,UITableViewDataSourc
     }
     
     @IBAction func btnShowPopUp(_ sender: Any) {
+        
         let popOverVc = UIStoryboard(name:"Main",bundle: nil).instantiateViewController(withIdentifier: "sbPopUpId") as! PopUpViewController
         
         self.addChildViewController(popOverVc)
@@ -81,114 +83,7 @@ class ViewController: UIViewController,UIScrollViewDelegate,UITableViewDataSourc
     {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-    //this function is fetching the json from URL
-    func getJsonFromUrl(){
-        
-        //check if record was deleted
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        var alreadyDeleted = false
-        var alreadyDeletedArtist = false
-        var alreadyDeletedTrack = false
-        
-        //check if already stored
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "RecordsDeleted")
-        
-      
-        
-        //creating a NSURL
-        let url = URL(string:"https://itunes.apple.com/search?term=JackJohnson&media=all&limit=100")
-            //https://itunes.apple.com/search?term=JackJohnson&media=music&limit=100")
-        
-        //fetching the data from the url
-        URLSession.shared.dataTask(with: (url as? URL)!, completionHandler: {(data, response, error) -> Void in
-            
-            if let jsonObj = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary {
-                
-                //printing the json in console
-              //  print(jsonObj!.value(forKey: "results")!)
-                
-                //getting the avengers tag array from json and converting it to NSArray
-                if let resultArray = jsonObj!.value(forKey: "results") as? NSArray {
-                    //looping through all the elements
-                    for result in resultArray{
-                        
-                        //converting the element to a dictionary
-                        if let resultDict = result as? NSDictionary {
-                            
-                            //getting the name from the dictionary
-                            if let name = resultDict.value(forKey: "trackName") {
-                                 let trackNameMain = resultDict["trackName"] as! String
-                                let artist = resultDict["artistName"] as! String
-                                let artworkURL = resultDict["artworkUrl60"] as! String
-                                let artworkURLLarge = resultDict["artworkUrl100"] as! String
-                                let albumTitle = resultDict["trackCensoredName"] as! String
-                                let genre = resultDict["primaryGenreName"] as! String
-                                let trackName = resultDict["trackName"] as! String
-                                alreadyDeleted = false
-                                request.returnsObjectsAsFaults = false
-                                do{
-                                    let results = try context.fetch(request)
-                                    if results.count > 0
-                                    {
-                                        for result in results as! [NSManagedObject]{
-                                            if let trackName = result.value(forKey: "trackName") as? String
-                                            {
-                                                if trackName == trackNameMain
-                                                {
-                                                    alreadyDeletedTrack = true
-                                                    
-                                                }
-                                                
-                                            }
-                                            
-                                            if let artistName = result.value(forKey: "artistName") as? String
-                                            {
-                                                
-                                                if artistName ==  artist
-                                                {
-                                                    alreadyDeletedArtist = true
-                                                }
-                                                
-                                                if ((alreadyDeletedArtist == true) && (alreadyDeletedTrack == true))
-                                                {
-                                                    
-                                                    alreadyDeletedArtist = false
-                                                    alreadyDeletedTrack = false
-                                                    alreadyDeleted = true
-                                                }
-                                            }
-                                            
-                                        }
-                                    }
-                                    
-                                }
-                                catch{
-                                    //
-                                }
-                                
-                                if alreadyDeleted == false{
-                                let album = Album(title:albumTitle,artist:artist,genre:genre,artworkURL:artworkURL,trackId:trackName,artworkURLLarge: artworkURLLarge,selected:false)
-                                
-                                //adding the name to the array
-                                nameArray.append(album)
-                                }
-                            }
-                            
-                        }
-                    }
-                }
-                
-                OperationQueue.main.addOperation({
-                    //calling another function after fetching the json
-                    //it will show the names to label
-                  //  self.showNames()
-                    self.albumTableView.reloadData()
-                    print(nameArray.count)
-                })
-            }
-        }).resume()
-    }
+    
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
@@ -230,9 +125,10 @@ var searchingIndex = 0
         }
         
         var albumArray: [Album] = []
-    
         var cell = albumTableView.dequeueReusableCell(withIdentifier: "cell",for: indexPath) as! ViewControllerTableViewCell
-       
+        
+        do{
+      
         //var cell:UITableViewCell? = albumTableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier)
             if (cell == nil) {
                 cell = UITableViewCell(style:UITableViewCellStyle.subtitle, reuseIdentifier:cellReuseIdentifier) as! ViewControllerTableViewCell
@@ -285,10 +181,10 @@ var searchingIndex = 0
         }
         else
         {
-            //if not seraching
-            //check if record was deleted
-            //check if record was selected
-            if(nameArray.count > 0){
+         
+            if(nameArray.count > 0)
+            {
+                //add try
             cell.lblAlbum.text = nameArray[indexPath.row].title
             cell.lblArtist.text = nameArray[indexPath.row].trackId
                 if deleteSelected == true && indexPath.row == indexToDelete{
@@ -310,7 +206,7 @@ var searchingIndex = 0
             {
                 cell.lblAlbum.text = ""
             }
-            
+               
             //check if record was selected in the past
       
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -350,29 +246,16 @@ var searchingIndex = 0
                             
                             
                         }
-                      /*  if ((alreadySavedArtist == true) && (alreadySavedTrack == true))
-                        {
-                            
-                            cell.backgroundColor = UIColor.gray
-                            alreadySavedArtist = false
-                            alreadySavedTrack = false
-                        }
-                        else
-                        {
-                            cell.backgroundColor = UIColor.white
-                        }*/
-                      //  if indexPath.row % 2 == 0 {
+        
                         if ((alreadySavedArtist == true) && (alreadySavedTrack == true))
                         {
                              cell.backgroundColor = UIColor.gray
                             cell.btnDeleteStatus?.isHidden = true
-                          //  cell.imageView?.image = UIImage(named: "\(indexPath.row)")
-                           // cell.textLabel?.text = nil
+                    
                         } else {
                             cell.backgroundColor = UIColor.white
                             cell.btnDeleteStatus?.isHidden = true
-                           // cell.imageView?.image = nil
-                            //cell.textLabel?.text = "\(indexPath.row)"
+                           
                         }
                         if (deleteSelected == true && indexPath.row == indexToDelete)
                         {
@@ -388,13 +271,21 @@ var searchingIndex = 0
                         
                     }
                 }
+          
                 
             }
             catch{
                 //
             }
+                
             
         }
+            }
+            
+        }
+        catch
+        {
+            print("error while updating cells")
         }
    
         
@@ -466,6 +357,7 @@ var searchingIndex = 0
         }
         catch{
             //
+            print("error while selecting cell")
         }
         //if already save, do not store again
         if alreadySaved == false
@@ -480,6 +372,7 @@ var searchingIndex = 0
             }
             catch{
                 //
+                print("error while saving core data selected records")
             }
         }
         
@@ -556,6 +449,7 @@ var searchingIndex = 0
         }
         catch{
             //
+            print("error while retrieving core data for deleted records")
         }
     }
     
@@ -594,17 +488,22 @@ var searchingIndex = 0
         }
         catch{
             //
+            print("error while retreiving selected records")
         }
     }
     
     
-    
+    var searchBarText = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       getSelectedRecords()
+        getSelectedRecords()
         getDeletedRecords()
-
+      if(termSearch == "")
+      {
+            termSearch = "Jack Johnson"
+        }
+        searchBar.text = termSearch
      //  pageIndicator.numberOfPages = 0
          navBar.topItem?.title = "Main page"
       //  ResultScrollView.delegate = self
@@ -614,7 +513,9 @@ var searchingIndex = 0
         
         if mediaSelected == false && nameArray.count == 0
         {
-            getJsonFromUrl()
+            //getJsonFromUrl()
+            ItunesConnection().getJsonFromUrl()
+            albumTableView.reloadData()
         }
      
         
@@ -623,41 +524,12 @@ var searchingIndex = 0
         albumTableView.dataSource = self
  
      //   NotificationCenter.default.addObserver(self.albumTableView, selector: #selector(UITableView.reloadData), name: .UIContentSizeCategoryDidChange, object: nil)
-        
-     
   
-        //tableview
-       
-        
     }
 
     @IBAction func searchMusic(_ sender: UIButton) {
     
-        ItunesConnection.getAlbumForString(searchString: searchTextField.text!,completionHandler: {(album:Album) ->
-            () in
-          //  print(album.title)
-            self.numberOfItems = self.numberOfItems+1
-          //  self.pageIndicator.numberOfPages = self.numberOfItems
-           // self.ResultScrollView.contentSize = CGSize(width: CGFloat( self.numberOfItems) * self.ResultScrollView.frame.size.width, height: self.ResultScrollView.frame.height)
-            
-        
-        let musicView = Bundle.main.loadNibNamed("MusicView", owner: self, options: nil)?.last as! MusicView
-        
-        musicView.frame = CGRect(origin: CGPoint(x: CGFloat(self.numberOfItems - 1) * self.ResultScrollView.frame.width,y :0),size: CGSize(width:self.ResultScrollView.frame.size.width,height: self.ResultScrollView.frame.size.height))
-        
-        musicView.updateConstraints()
-        
-        DispatchQueue.global(qos: .background).async {
-            // Background Thread
-            DispatchQueue.main.async {
-                // Run UI Updates or call completion block
-                musicView.addDataToMusicView(album: album)
-                self.ResultScrollView.addSubview(musicView)
-                self.ResultScrollView.scrollRectToVisible(musicView.frame, animated: true)
-                
-            }
-        }
-              })
+      
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -675,6 +547,7 @@ fileprivate let syncQueue = DispatchQueue(label: "Downloader.syncQueue")
     extension ViewController: UISearchBarDelegate{
         func searchBar(_ searchBar:UISearchBar,textDidChange searchText: String)
         {
+            termSearch = searchText
             syncQueue.sync {
                  ItunesConnection().getJsonFromUrlSearch(searchString: searchText)
                 searchAlbum = nameArray.filter{$0.trackId.description.lowercased().prefix(searchText.count) == searchText.lowercased()}
@@ -684,26 +557,7 @@ fileprivate let syncQueue = DispatchQueue(label: "Downloader.syncQueue")
                 
                 print("done")
             }
-           
-            
-            
-            /*for result in nameArray
-            {
-                
-                for r in searchAlbum
-                {
-                    
-                    if(result.trackId == searchAlbum[rIndex].trackId)
-                    {
-                        rIndex+=1
-                        searchingIndex = i
-                        albumTableView.reloadData()
-                        return
-                    }
-                    i+=1
-                }
-            }*/
-            
+ 
         }
         
         func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

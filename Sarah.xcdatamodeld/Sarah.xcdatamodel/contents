@@ -8,8 +8,12 @@
         <attribute name="artistName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="trackName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="TermSearch" representedClassName="TermSearch" syncable="YES" codeGenerationType="class">
+        <attribute name="term" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="RecordsDeleted" positionX="-63" positionY="-18" width="128" height="75"/>
         <element name="RecordsSelected" positionX="-54" positionY="9" width="128" height="75"/>
+        <element name="TermSearch" positionX="-54" positionY="9" width="128" height="60"/>
     </elements>
 </model>

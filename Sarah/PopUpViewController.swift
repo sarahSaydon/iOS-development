@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class PopUpViewController: UIViewController {
 
@@ -24,15 +25,18 @@ class PopUpViewController: UIViewController {
     @IBOutlet weak var btnAll: UIButton!
     fileprivate let syncQueue = DispatchQueue(label: "Downloader.syncQueue")
     @IBAction func btnMediaSelected(_ sender: Any) {
+     
         
         syncQueue.sync {
-     
-            ItunesConnection().getJsonFromUrlMedia(searchString: mediaSelected)
             
+            ItunesConnection().getJsonFromUrlMedia(searchString: termSearch,mediaString:mediaSelected)
             
-            self.view.removeFromSuperview()
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "sbMain") as! ViewController
+            
+            self.view.removeFromSuperview()
+          //  let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            //let newViewController = storyBoard.instantiateViewController(withIdentifier: "sbMain") as! ViewController
             //newViewController.albumTableView.reloadData()
             sleep(2)
             self.present(newViewController, animated: true, completion: nil)

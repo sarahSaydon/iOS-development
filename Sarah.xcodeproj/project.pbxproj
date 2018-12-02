@@ -20,6 +20,7 @@
 		266A4CEE21AC26D400F1E4EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 266A4CEC21AC26D400F1E4EA /* LaunchScreen.storyboard */; };
 		266A4CF921AC26D500F1E4EA /* SarahTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266A4CF821AC26D500F1E4EA /* SarahTests.swift */; };
 		266A4D0421AC26D500F1E4EA /* SarahUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266A4D0321AC26D500F1E4EA /* SarahUITests.swift */; };
+		2670725121B442DC00D83DD6 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2670725021B442DC00D83DD6 /* Session.swift */; };
 		268AD38F21B156E3005D9549 /* DeletePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268AD38E21B156E3005D9549 /* DeletePopUpViewController.swift */; };
 		268AD39721B2B7C9005D9549 /* Sarah.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 268AD39521B2B7C9005D9549 /* Sarah.xcdatamodeld */; };
 		26D0596121AD53D900E35D6F /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D0596021AD53D900E35D6F /* Album.swift */; };
@@ -62,6 +63,7 @@
 		266A4CFF21AC26D500F1E4EA /* SarahUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SarahUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		266A4D0321AC26D500F1E4EA /* SarahUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SarahUITests.swift; sourceTree = "<group>"; };
 		266A4D0521AC26D500F1E4EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2670725021B442DC00D83DD6 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		268AD38E21B156E3005D9549 /* DeletePopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePopUpViewController.swift; sourceTree = "<group>"; };
 		268AD39621B2B7C9005D9549 /* Sarah.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sarah.xcdatamodel; sourceTree = "<group>"; };
 		26D0596021AD53D900E35D6F /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				26D0596021AD53D900E35D6F /* Album.swift */,
+				2670725021B442DC00D83DD6 /* Session.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 				264D2F2D21ADCFA30065DE22 /* ViewControllerTableViewCell.swift in Sources */,
 				263DB1EB21AD612C0066879C /* MusicView.swift in Sources */,
 				268AD38F21B156E3005D9549 /* DeletePopUpViewController.swift in Sources */,
+				2670725121B442DC00D83DD6 /* Session.swift in Sources */,
 				263A710221AD447A002832A1 /* ItunesConnection.swift in Sources */,
 				26D0596121AD53D900E35D6F /* Album.swift in Sources */,
 				264D2F3121B1358D0065DE22 /* DetailViewController.swift in Sources */,
