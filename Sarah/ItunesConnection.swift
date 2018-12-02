@@ -112,7 +112,7 @@ class ItunesConnection: NSObject {
                     //calling another function after fetching the json
                     //it will show the names to label
                     //  self.showNames()
-                  //  self.albumTableView.reloadData()
+                  //albumTableView.reloadData()
                     print(nameArray.count)
                 })
             }
